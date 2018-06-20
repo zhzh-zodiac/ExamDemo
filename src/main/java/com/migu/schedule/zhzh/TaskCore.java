@@ -92,13 +92,16 @@ public class TaskCore
         int consumptions = 0;
 
         List<TaskInfoDetail> taskInfoDetailList = new ArrayList<>();
+
         for(TaskInfoDetail taskInfoDetail:taskPool.values())
         {
             consumptions = consumptions + taskInfoDetail.getConsumption();
             taskInfoDetailList.add(taskInfoDetail);
         }
+        taskInfoDetailList = sort(taskInfoDetailList);
+
         int avgconsumption = consumptions/nodeCount;
-        List<List<Integer>> tempNode = new ArrayList<>();
+        List<List<TaskInfoDetail>> tempNode = new ArrayList<>();
         for(int i=0;i<nodeCount;i++)
         {
             List<Integer> tempTasks = new ArrayList<>();
@@ -127,5 +130,27 @@ public class TaskCore
         return ReturnCodeKeys.E015;
     }
 
+    public List sort(List<TaskInfoDetail> list)
+    {
+        if(null == list)
+        {
+            return null;
+        }
+        int size = list.size();
+        for(int i=0;i<size-1;i++)
+        {
+            for(int j=0;j<size-1;j++)
+            {
+                boolean flag = list.get(j).getConsumption()>(list.get(j+1).getConsumption());
+                if(flag)
+                {
+                    TaskInfoDetail temp = list.get(j);
+                    list.set(j,list.get(j+1));
+                    list.set(j+1,temp);
+                }
+            }
+        }
+        return list;
+    }
 
 }
